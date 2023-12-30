@@ -7,10 +7,24 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
+use OpenApi\Annotations as OA;
 
+/**
+ * @OA\Schema(
+ *     schema="User",
+ *     required={"name", "email", "password"}
+ * )
+ */
 class User extends Authenticatable
 {
     use HasApiTokens, HasFactory, Notifiable;
+
+
+    /**
+     * @OA\Property(type="integer", example=1)
+     * @OA\Property(type="string", example="John Doe")
+     * @OA\Property(type="string", format="email", example="johndoe@example.com")
+     */
 
     /**
      * The attributes that are mass assignable.

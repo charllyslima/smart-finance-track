@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\FinancialTransactionsController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -22,4 +23,11 @@ Route::post('/login', [AuthController::class, 'login']);
 // Grupo de rotas protegidas
 Route::middleware('auth:sanctum')->group(function () {
     Route::post('/logout', [AuthController::class, 'logout']);
+    Route::get('/financial-transactions', [FinancialTransactionsController::class, 'index']);
+    Route::post('/financial-transactions', [FinancialTransactionsController::class,'store']);
+    Route::put('/financial-transactions/{id}', [FinancialTransactionsController::class,'update']);
+    Route::delete('/financial-transactions/{id}', [FinancialTransactionsController::class,'destroy']);
+    Route::get('/financial-transactions/{id}', [FinancialTransactionsController::class,'show']);
 });
+
+

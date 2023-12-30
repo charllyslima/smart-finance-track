@@ -1,0 +1,589 @@
+{
+    "openapi": "3.0.0",
+    "info": {
+        "title": "Smart Finance Track Documentation",
+        "description": "Smart Finance Track Documentation",
+        "contact": {
+            "email": "admin@admin.com"
+        },
+        "license": {
+            "name": "Apache 2.0",
+            "url": "http://www.apache.org/licenses/LICENSE-2.0.html"
+        },
+        "version": "1.0.0"
+    },
+    "servers": [
+        {
+            "url": "172.0.0.1:8000",
+            "description": "Demo API Server"
+        }
+    ],
+    "paths": {
+        "/api": {},
+        "/api/register": {
+            "post": {
+                "tags": [
+                    "Autenticação"
+                ],
+                "summary": "Registrar um novo usuário",
+                "description": "Cria um novo usuário e gera um token de autenticação.",
+                "operationId": "register",
+                "requestBody": {
+                    "description": "Dados do usuário a serem registrados",
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "name",
+                                    "email",
+                                    "password",
+                                    "password_confirmation"
+                                ],
+                                "properties": {
+                                    "name": {
+                                        "type": "string",
+                                        "example": "John Doe"
+                                    },
+                                    "email": {
+                                        "type": "string",
+                                        "format": "email",
+                                        "example": "johndoe@example.com"
+                                    },
+                                    "password": {
+                                        "type": "string",
+                                        "format": "password",
+                                        "example": "senha123"
+                                    },
+                                    "password_confirmation": {
+                                        "type": "string",
+                                        "format": "password",
+                                        "example": "senha123"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "Usuário registrado com sucesso",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "access_token": {
+                                            "type": "string",
+                                            "example": "seu_token_de_acesso"
+                                        },
+                                        "token_type": {
+                                            "type": "string",
+                                            "example": "Bearer"
+                                        },
+                                        "user": {
+                                            "$ref": "#/components/schemas/User"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Dados de entrada inválidos ou incompletos",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Os dados fornecidos são inválidos."
+                                        },
+                                        "errors": {
+                                            "type": "object",
+                                            "example": {
+                                                "name": [
+                                                    "O campo name é obrigatório."
+                                                ],
+                                                "email": [
+                                                    "O campo email é obrigatório."
+                                                ],
+                                                "password": [
+                                                    "O campo password é obrigatório."
+                                                ]
+                                            }
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/login": {
+            "post": {
+                "tags": [
+                    "Autenticação"
+                ],
+                "summary": "Efetuar login de usuário",
+                "description": "Efetua login de um usuário com base nas credenciais fornecidas e gera um token de autenticação.",
+                "operationId": "login",
+                "requestBody": {
+                    "description": "Credenciais do usuário para login",
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "email",
+                                    "password"
+                                ],
+                                "properties": {
+                                    "email": {
+                                        "type": "string",
+                                        "format": "email",
+                                        "example": "johndoe@example.com"
+                                    },
+                                    "password": {
+                                        "type": "string",
+                                        "format": "password",
+                                        "example": "senha123"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Login bem-sucedido",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "access_token": {
+                                            "type": "string",
+                                            "example": "seu_token_de_acesso"
+                                        },
+                                        "token_type": {
+                                            "type": "string",
+                                            "example": "Bearer"
+                                        },
+                                        "user": {
+                                            "$ref": "#/components/schemas/User"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Credenciais fornecidas são incorretas",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "As credenciais fornecidas são incorretas."
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/logout": {
+            "post": {
+                "tags": [
+                    "Autenticação"
+                ],
+                "summary": "Encerrar sessão do usuário",
+                "description": "Encerra a sessão de um usuário autenticado e revoga o token de autenticação.",
+                "operationId": "logout",
+                "responses": {
+                    "200": {
+                        "description": "Logout bem-sucedido",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Sessão encerrada com sucesso."
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Não autorizado",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Não autorizado."
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/api/financial-transactions": {
+            "get": {
+                "tags": [
+                    "Transações Financeiras"
+                ],
+                "summary": "Listar transações financeiras",
+                "description": "Retorna a lista de todas as transações financeiras do usuário autenticado, com opção de filtrar por tipo de transação e intervalo de datas (opcionais).",
+                "operationId": "b5d47f826bdcee90889694bfb6628eac",
+                "parameters": [
+                    {
+                        "name": "transaction_type",
+                        "in": "query",
+                        "description": "Filtrar por tipo de transação (DEPOSIT, WITHDRAWAL, INVESTMENT, DIVIDENDS)",
+                        "required": false,
+                        "schema": {
+                            "type": "string",
+                            "enum": [
+                                "DEPOSIT",
+                                "WITHDRAWAL",
+                                "INVESTMENT",
+                                "DIVIDENDS"
+                            ]
+                        }
+                    },
+                    {
+                        "name": "start_date",
+                        "in": "query",
+                        "description": "Filtrar por data de início (formato: 'YYYY-MM-DD')",
+                        "required": false,
+                        "schema": {
+                            "type": "string",
+                            "format": "date"
+                        }
+                    },
+                    {
+                        "name": "end_date",
+                        "in": "query",
+                        "description": "Filtrar por data de término (formato: 'YYYY-MM-DD', deve ser posterior ou igual à data de início)",
+                        "required": false,
+                        "schema": {
+                            "type": "string",
+                            "format": "date"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Informações das transações financeiras",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "financialTransactions": {
+                                            "type": "array",
+                                            "items": {
+                                                "$ref": "#/components/schemas/FinancialTransaction"
+                                            }
+                                        },
+                                        "totalDeposit": {
+                                            "type": "number",
+                                            "format": "float",
+                                            "example": 1000
+                                        },
+                                        "totalWithdraw": {
+                                            "type": "number",
+                                            "format": "float",
+                                            "example": 500
+                                        },
+                                        "totalBalance": {
+                                            "type": "number",
+                                            "format": "float",
+                                            "example": 500
+                                        },
+                                        "totalInvestment": {
+                                            "type": "number",
+                                            "format": "float",
+                                            "example": 1000
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Não autorizado"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            },
+            "post": {
+                "tags": [
+                    "Transações Financeiras"
+                ],
+                "summary": "Criar transação financeira",
+                "description": "Cria uma nova transação financeira para o usuário autenticado.",
+                "operationId": "a13f8a94f6c64d0eb64f267863888b97",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/FinancialTransactionCreateRequest"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "Transação financeira criada com sucesso"
+                    },
+                    "500": {
+                        "description": "Erro ao criar transação financeira"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/api/financial-transactions/{id}": {
+            "get": {
+                "tags": [
+                    "Transações Financeiras"
+                ],
+                "summary": "Obter detalhes da transação financeira",
+                "description": "Retorna detalhes de uma transação financeira específica do usuário autenticado.",
+                "operationId": "61c6c21209f8d3b1ea6f93a472486e43",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "ID da transação financeira a ser obtida",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Detalhes da transação financeira",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/FinancialTransaction"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Registro não encontrado"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            },
+            "put": {
+                "tags": [
+                    "Transações Financeiras"
+                ],
+                "summary": "Atualizar transação financeira",
+                "description": "Atualiza uma transação financeira existente do usuário autenticado.",
+                "operationId": "fb5814a2f763dcba6b15386d93aacffe",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "ID da transação financeira a ser atualizada",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/FinancialTransactionCreateRequest"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Transação financeira atualizada com sucesso"
+                    },
+                    "403": {
+                        "description": "Você não tem permissão para acessar este registro"
+                    },
+                    "500": {
+                        "description": "Erro ao atualizar transação financeira"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            },
+            "delete": {
+                "tags": [
+                    "Transações Financeiras"
+                ],
+                "summary": "Excluir transação financeira",
+                "description": "Exclui uma transação financeira existente do usuário autenticado.",
+                "operationId": "dd0a19236d8a98f5aa223bfd78b6d729",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "ID da transação financeira a ser excluída",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Transação financeira excluída com sucesso"
+                    },
+                    "403": {
+                        "description": "Você não tem permissão para acessar este registro"
+                    },
+                    "500": {
+                        "description": "Erro ao excluir transação financeira"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        }
+    },
+    "components": {
+        "schemas": {
+            "FinancialTransactionCreateRequest": {
+                "title": "FinancialTransactionCreateRequest",
+                "description": "Modelo de requisição para criar uma transação financeira",
+                "properties": {
+                    "user_id": {
+                        "description": "ID do usuário",
+                        "type": "integer",
+                        "example": 1
+                    },
+                    "transaction_type": {
+                        "description": "Tipo de transação",
+                        "type": "string",
+                        "enum": [
+                            "DEPOSIT",
+                            "WITHDRAWAL",
+                            "INVESTMENT",
+                            "DIVIDENDS"
+                        ],
+                        "example": "DEPOSIT"
+                    },
+                    "amount": {
+                        "description": "Valor da transação",
+                        "type": "number",
+                        "example": 100
+                    }
+                },
+                "type": "object"
+            },
+            "FinancialTransaction": {
+                "title": "FinancialTransaction",
+                "description": "Modelo de transação financeira",
+                "properties": {
+                    "id": {
+                        "description": "ID da transação financeira",
+                        "type": "integer",
+                        "example": 1
+                    },
+                    "transaction_type": {
+                        "description": "Tipo de transação (DEPOSIT, WITHDRAWAL, INVESTMENT, DIVIDENDS)",
+                        "type": "string",
+                        "example": "DEPOSIT"
+                    },
+                    "transaction_date": {
+                        "description": "Data da transação no formato 'YYYY-MM-DD'",
+                        "type": "string",
+                        "example": "0000-11-11"
+                    },
+                    "amount": {
+                        "description": "Valor da transação",
+                        "type": "string",
+                        "example": "100.00"
+                    }
+                },
+                "type": "object"
+            },
+            "User": {
+                "required": [
+                    "name",
+                    "email",
+                    "password"
+                ],
+                "properties": {
+                    "id": {
+                        "type": "integer",
+                        "example": 1
+                    },
+                    "name": {
+                        "type": "string",
+                        "example": "John Doe"
+                    },
+                    "email": {
+                        "type": "string",
+                        "format": "email",
+                        "example": "johndoe@example.com"
+                    }
+                },
+                "type": "object"
+            }
+        },
+        "securitySchemes": {
+            "bearerAuth": {
+                "type": "http",
+                "scheme": "bearer"
+            }
+        }
+    }
+}
