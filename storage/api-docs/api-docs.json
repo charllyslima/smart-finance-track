@@ -256,7 +256,7 @@
                     "Transações Financeiras"
                 ],
                 "summary": "Listar transações financeiras",
-                "description": "Retorna a lista de todas as transações financeiras do usuário autenticado, com opção de filtrar por tipo de transação e intervalo de datas (opcionais).",
+                "description": "Retorna a lista paginada de todas as transações financeiras do usuário autenticado, com opção de filtrar por tipo de transação e intervalo de datas (opcionais). Inclui a opção de paginar os resultados.",
                 "operationId": "b5d47f826bdcee90889694bfb6628eac",
                 "parameters": [
                     {
@@ -292,6 +292,24 @@
                         "schema": {
                             "type": "string",
                             "format": "date"
+                        }
+                    },
+                    {
+                        "name": "page",
+                        "in": "query",
+                        "description": "Número da página para a paginação (opcional)",
+                        "required": false,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    },
+                    {
+                        "name": "page_size",
+                        "in": "query",
+                        "description": "Quantidade de itens por página (opcional, padrão 10)",
+                        "required": false,
+                        "schema": {
+                            "type": "integer"
                         }
                     }
                 ],
@@ -535,22 +553,34 @@
                     "id": {
                         "description": "ID da transação financeira",
                         "type": "integer",
-                        "example": 1
+                        "example": 1,
+                        "enum": [
+                            "WITHDRAWAL"
+                        ]
                     },
                     "transaction_type": {
                         "description": "Tipo de transação (DEPOSIT, WITHDRAWAL, INVESTMENT, DIVIDENDS)",
                         "type": "string",
-                        "example": "DEPOSIT"
+                        "example": "DEPOSIT",
+                        "enum": [
+                            "WITHDRAWAL"
+                        ]
                     },
                     "transaction_date": {
                         "description": "Data da transação no formato 'YYYY-MM-DD'",
                         "type": "string",
-                        "example": "0000-11-11"
+                        "example": "1956-01-01",
+                        "enum": [
+                            "WITHDRAWAL"
+                        ]
                     },
                     "amount": {
                         "description": "Valor da transação",
                         "type": "string",
-                        "example": "100.00"
+                        "example": "100.00",
+                        "enum": [
+                            "WITHDRAWAL"
+                        ]
                     }
                 },
                 "type": "object"
@@ -560,23 +590,7 @@
                     "name",
                     "email",
                     "password"
-                ],
-                "properties": {
-                    "id": {
-                        "type": "integer",
-                        "example": 1
-                    },
-                    "name": {
-                        "type": "string",
-                        "example": "John Doe"
-                    },
-                    "email": {
-                        "type": "string",
-                        "format": "email",
-                        "example": "johndoe@example.com"
-                    }
-                },
-                "type": "object"
+                ]
             }
         },
         "securitySchemes": {
