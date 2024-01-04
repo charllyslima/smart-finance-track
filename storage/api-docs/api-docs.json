@@ -543,7 +543,7 @@
                 "tags": [
                     "Profile"
                 ],
-                "summary": "Atualizar informações do usuário",
+                "summary": "Atualizar informações do usuário autenticado",
                 "description": "Atualiza as informações do usuário autenticado.",
                 "operationId": "update",
                 "requestBody": {
