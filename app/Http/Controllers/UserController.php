@@ -13,18 +13,52 @@ use OpenApi\Annotations as OA;
 
 class UserController extends Controller
 {
-//    public function destroy(int $id): JsonResponse
-//    {
-//
-//    }
+    /**
+     * Remove o próprio usuário autenticado.
+     *
+     * @OA\Delete(
+     *     path="/api/delete/profile",
+     *     summary="Exclui o próprio usuário autenticado",
+     *     description="Exclui permanentemente o usuário autenticado do sistema.",
+     *     operationId="destroy",
+     *     tags={"Profile"},
+     *     security={{"bearerAuth":{}}},
+     *     @OA\Response(
+     *         response=204,
+     *         description="Registro de usuário excluído com sucesso",
+     *     ),
+     *     @OA\Response(
+     *         response=500,
+     *         description="Falha ao excluir o registro do usuário",
+     *     ),
+     * )
+     *
+     * @return JsonResponse
+     */
+
+    public function destroy(): JsonResponse
+    {
+        try {
+            $user = Auth::user();
+
+            if ($user) {
+                $user->delete();
+                return response()->json(null, 204);
+            }
+
+            return response()->json(['message' => 'Usuário não encontrado'], 404); // Se o usuário não for encontrado, retorna 404.
+        } catch (\Exception $e) {
+            return response()->json(['message' => 'Falha ao excluir o registro do usuário'], 500);
+        }
+    }
 
     /**
      * @OA\Put(
      *     path="/api/update/profile",
-     *     summary="Atualizar informações do usuário",
+     *     summary="Atualizar informações do usuário autenticado",
      *     description="Atualiza as informações do usuário autenticado.",
      *     operationId="update",
-     *     tags={"Usuário"},
+     *     tags={"Profile"},
      *     security={{"bearerAuth":{}}},
      *     @OA\RequestBody(
      *         required=true,
@@ -32,7 +66,6 @@ class UserController extends Controller
      *         @OA\JsonContent(
      *             @OA\Property(property="name", type="string", example="Novo Nome"),
      *             @OA\Property(property="email", type="string", format="email", example="novonome@example.com"),
-     *             // Outras propriedades que podem ser atualizadas
      *         )
      *     ),
      *     @OA\Response(

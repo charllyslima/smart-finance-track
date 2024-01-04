@@ -30,6 +30,7 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::delete('/financial-transactions/{id}', [FinancialTransactionsController::class,'destroy'])->where('id', '[0-9]+');
     Route::get('/financial-transactions/{id}', [FinancialTransactionsController::class,'show'])->where('id', '[0-9]+');
     Route::put('/update/profile', [UserController::class, 'update']);
+    Route::delete('/delete/profile', [UserController::class, 'destroy']);
 });
 
 
