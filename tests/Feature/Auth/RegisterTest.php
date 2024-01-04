@@ -11,7 +11,7 @@ class RegisterTest extends TestCase
     use RefreshDatabase;
 
     /** @test */
-    public function a_user_can_register()
+    public function a_user_can_register(): void
     {
         $response = $this->post('/api/register', [
             'name' => 'Test User',
@@ -31,7 +31,7 @@ class RegisterTest extends TestCase
     }
 
     /** @test */
-    public function registration_requires_name_email_password()
+    public function registration_requires_name_email_password(): void
     {
         $response = $this->post('/api/register', [
             'name' => '',
@@ -44,7 +44,7 @@ class RegisterTest extends TestCase
     }
 
     /** @test */
-    public function registration_requires_unique_email()
+    public function registration_requires_unique_email(): void
     {
         User::create([
             'name' => 'Existing User',
@@ -64,7 +64,7 @@ class RegisterTest extends TestCase
     }
 
     /** @test */
-    public function name_must_be_valid()
+    public function name_must_be_valid(): void
     {
         $response = $this->post('/api/register', [
             'name' => 'Invalid Name123', // Nome inválido contendo números
