@@ -1,9 +1,9 @@
 <?php
 
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\FinancialImportController;
 use App\Http\Controllers\FinancialTransactionsController;
 use App\Http\Controllers\UserController;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -31,6 +31,7 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::get('/financial-transactions/{id}', [FinancialTransactionsController::class,'show'])->where('id', '[0-9]+');
     Route::put('/update/profile', [UserController::class, 'update']);
     Route::delete('/delete/profile', [UserController::class, 'destroy']);
+    Route::post('/import-personal', [FinancialImportController::class, 'importHistoryB3']);
 });
 
 
