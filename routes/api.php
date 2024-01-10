@@ -1,8 +1,9 @@
 <?php
 
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\FinancialImportController;
 use App\Http\Controllers\FinancialTransactionsController;
-use Illuminate\Http\Request;
+use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -25,9 +26,12 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::post('/logout', [AuthController::class, 'logout']);
     Route::get('/financial-transactions', [FinancialTransactionsController::class, 'index']);
     Route::post('/financial-transactions', [FinancialTransactionsController::class,'store']);
-    Route::put('/financial-transactions/{id}', [FinancialTransactionsController::class,'update']);
-    Route::delete('/financial-transactions/{id}', [FinancialTransactionsController::class,'destroy']);
-    Route::get('/financial-transactions/{id}', [FinancialTransactionsController::class,'show']);
+    Route::put('/financial-transactions/{id}', [FinancialTransactionsController::class,'update'])->where('id', '[0-9]+');
+    Route::delete('/financial-transactions/{id}', [FinancialTransactionsController::class,'destroy'])->where('id', '[0-9]+');
+    Route::get('/financial-transactions/{id}', [FinancialTransactionsController::class,'show'])->where('id', '[0-9]+');
+    Route::put('/update/profile', [UserController::class, 'update']);
+    Route::delete('/delete/profile', [UserController::class, 'destroy']);
+    Route::post('/import-personal', [FinancialImportController::class, 'importHistoryB3']);
 });
 
 

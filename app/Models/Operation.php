@@ -5,11 +5,9 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class FiAsset extends Model
+class Operation extends Model
 {
     use HasFactory;
 
-    protected $table = 'fi_assets';
-
-    protected $fillable = ['id', 'acronym', 'fundName', 'companyName'];
+    protected $fillable = ['user_id', 'fi_asset_id', 'quantity', 'price', 'total', 'type', 'created_at'];
 }
