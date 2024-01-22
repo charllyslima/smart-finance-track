@@ -28,8 +28,10 @@ class FiAssetsValuesSeeder extends Seeder
                 'Connection' => 'keep-alive',
             ]
         ]);
-
+        $index = 1;
+        $total = count($fiis);
         foreach ($fiis as $fii) {
+            echo $fii->acronym . '11...........';
             $params = [
                 'ticker' => $fii->acronym . '11',
                 'type' => 4,
@@ -49,6 +51,8 @@ class FiAssetsValuesSeeder extends Seeder
                     ]);
                 }
             }
+            echo " OK ({$index}/{$total}) \n";
+            $index++;
             sleep(1);
 
         }

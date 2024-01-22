@@ -14,7 +14,9 @@
         "laravel/framework": "^10.10",
         "laravel/sanctum": "^3.3",
         "laravel/tinker": "^2.8",
-        "phpoffice/phpspreadsheet": "^1.29"
+        "phpoffice/phpspreadsheet": "^1.29",
+        "ext-dom": "*",
+        "ext-libxml": "*"
     },
     "require-dev": {
         "roave/security-advisories": "dev-latest",

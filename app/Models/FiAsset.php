@@ -12,4 +12,9 @@ class FiAsset extends Model
     protected $table = 'fi_assets';
 
     protected $fillable = ['id', 'acronym', 'fundName', 'companyName'];
+
+    public function operations()
+    {
+        return $this->hasMany(Operation::class);
+    }
 }
