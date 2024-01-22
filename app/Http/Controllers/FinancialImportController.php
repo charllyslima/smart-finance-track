@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\FiAsset;
+use App\Models\FiAssetsEvent;
 use App\Models\Operation;
 use Carbon\Carbon;
 use Illuminate\Http\JsonResponse;
@@ -77,49 +78,73 @@ class FinancialImportController extends Controller
         $file = $request->file('file');
 
 //        try {
-            $spreadsheet = IOFactory::load($file);
-            $worksheet = $spreadsheet->getActiveSheet();
-            $rows = $worksheet->toArray();
+        $spreadsheet = IOFactory::load($file);
+        $worksheet = $spreadsheet->getActiveSheet();
+        $rows = $worksheet->toArray();
 
-            array_shift($rows);
+        array_shift($rows);
 
-            foreach ($rows as $row) {
+        foreach ($rows as $row) {
 
-                if ($row[2] === 'Transferência - Liquidação') {
-                    $fund = $this->extractCodeParts($row[3]);
+            if ($row[2] === 'Transferência - Liquidação' || $row[2] === 'Atualização') {
 
-                    $fiAssets = FiAsset::where('acronym', $fund['fund'])->first();
+                $fund = $this->extractCodeParts($row[3]);
 
+                if ($fund['type'] === 11) {
                     $quantity = (int)$row[5];
-                    $unitPrice = (double)str_replace(' R$', '', str_replace(',', '.', $row[6]));
-                    $total = (double)str_replace(' R$', '', str_replace(',', '.', $row[7]));
+                    $fiAssets = FiAsset::where('acronym', $fund['fund'])->first();
+                    if ($row[6] === ' - ') {
 
-                    if ($row[0] === 'Debito') {
+                        $dataFornecida = Carbon::createFromFormat('d/m/Y', $row[1])->toDateString();
+
+                        $sub = FiAssetsEvent::where('fi_asset_id', $fiAssets->id)
+                            ->where('type', 'SUBINSCRIÇÃO')
+                            ->where('created_at', '<', $dataFornecida)
+                            ->orderBy('created_at', 'desc')
+                            ->get();
+
                         Operation::create([
                             'user_id' => Auth::id(),
                             'fi_asset_id' => $fiAssets->id,
                             'quantity' => $quantity,
-                            'price' => $unitPrice,
-                            'total' => $total,
-                            'type' => 'sale',
-                            'created_at' => Carbon::createFromFormat('d/m/Y', $row[1])->toDateString()
-                        ]);
-                    } else {
-                        Operation::create([
-                            'user_id' => Auth::id(),
-                            'fi_asset_id' => $fiAssets->id,
-                            'quantity' => $quantity,
-                            'price' => $unitPrice,
-                            'total' => $total,
+                            'price' => $sub->price,
+                            'total' => $sub->price * $quantity,
                             'type' => 'purchase',
                             'created_at' => Carbon::createFromFormat('d/m/Y', $row[1])->toDateString()
                         ]);
+                    } else {
+
+                        $unitPrice = (double)str_replace(' R$', '', str_replace(',', '.', $row[6]));
+                        $total = (double)str_replace(' R$', '', str_replace(',', '.', $row[7]));
+
+                        if ($row[0] === 'Debito') {
+                            Operation::create([
+                                'user_id' => Auth::id(),
+                                'fi_asset_id' => $fiAssets->id,
+                                'quantity' => $quantity,
+                                'price' => $unitPrice,
+                                'total' => $total,
+                                'type' => 'sale',
+                                'created_at' => Carbon::createFromFormat('d/m/Y', $row[1])->toDateString()
+                            ]);
+                        } else {
+                            Operation::create([
+                                'user_id' => Auth::id(),
+                                'fi_asset_id' => $fiAssets->id,
+                                'quantity' => $quantity,
+                                'price' => $unitPrice,
+                                'total' => $total,
+                                'type' => 'purchase',
+                                'created_at' => Carbon::createFromFormat('d/m/Y', $row[1])->toDateString()
+                            ]);
+                        }
                     }
 
                 }
             }
+        }
 
-            return response()->json(['message' => 'Dados importados com sucesso!']);
+        return response()->json(['message' => 'Dados importados com sucesso!']);
 //        } catch (\Exception $e) {
 //            return response()->json(['message' => 'Erro ao importar arquivo'], 500);
 //        }
@@ -134,7 +159,7 @@ class FinancialImportController extends Controller
             if (preg_match("/([a-zA-Z]+)(11)/", $code, $matches)) {
                 return [
                     'fund' => $matches[1],
-                    'type' => $matches[2]
+                    'type' => (int)$matches[2]
                 ];
             }
         }
