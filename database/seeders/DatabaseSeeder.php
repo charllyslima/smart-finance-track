@@ -12,11 +12,12 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
-        // \App\Models\User::factory(10)->create();
+        $this->call([
+            FiAssetsSeeder::class, //B3
+            FiAssetsInformationsSeeder::class, //B3
+            FiAssetsDividendsSeeder::class, //STATUS INVEST
+            FiAssetsValuesSeeder::class //STATUS INVEST
 
-        // \App\Models\User::factory()->create([
-        //     'name' => 'Test User',
-        //     'email' => 'test@example.com',
-        // ]);
+        ]);
     }
 }

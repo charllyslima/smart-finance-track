@@ -34,9 +34,9 @@ class RouteServiceProvider extends ServiceProvider
                 ->prefix('api')
                 ->middleware([ForceJsonResponse::class])
                 ->group(base_path('routes/api.php'));
-//
-//            Route::middleware('web')
-//                ->group(base_path('routes/web.php'));
+
+            Route::middleware('web')
+                ->group(base_path('routes/web.php'));
         });
     }
 }

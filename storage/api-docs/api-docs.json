@@ -14,7 +14,7 @@
     },
     "servers": [
         {
-            "url": "172.0.0.1:8000",
+            "url": "http://smart-fin-track.test",
             "description": "Demo API Server"
         }
     ],
@@ -235,6 +235,88 @@
                                         "message": {
                                             "type": "string",
                                             "example": "Não autorizado."
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/api/import-personal": {
+            "post": {
+                "tags": [
+                    "Financeiro"
+                ],
+                "summary": "Importar histórico financeiro da B3 a partir de um arquivo .xlsx",
+                "description": "Importa um histórico financeiro da B3 a partir de um arquivo .xlsx, processa cada linha do arquivo e realiza as ações necessárias com os dados.",
+                "operationId": "importHistoryB3",
+                "requestBody": {
+                    "description": "Arquivo .xlsx contendo o histórico financeiro da B3",
+                    "required": true,
+                    "content": {
+                        "multipart/form-data": {
+                            "schema": {
+                                "properties": {
+                                    "file": {
+                                        "description": "Arquivo .xlsx",
+                                        "type": "file"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Arquivo importado com sucesso",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Arquivo importado com sucesso"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Requisição inválida",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "O arquivo deve ser um .xlsx"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Erro ao importar arquivo",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Erro ao importar arquivo"
                                         }
                                     },
                                     "type": "object"
@@ -515,6 +597,84 @@
                 ]
             }
         },
+        "/api/sync-price": {
+            "get": {
+                "tags": [
+                    "Financeiro"
+                ],
+                "summary": "Sincroniza o preço dos ativos financeiros",
+                "description": "Sincroniza o preço dos ativos financeiros (FIIs) com uma fonte externa, utilizando uma chave de aplicação para autenticação. Retorna o preço atualizado de cada ativo financeiro.",
+                "operationId": "syncPrice",
+                "parameters": [
+                    {
+                        "name": "appKey",
+                        "in": "path",
+                        "description": "Chave de aplicação para autenticação do serviço.",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Preços atualizados com sucesso",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "array",
+                                    "items": {
+                                        "properties": {
+                                            "ticker": {
+                                                "description": "O acrônimo do ativo financeiro.",
+                                                "type": "string"
+                                            },
+                                            "price": {
+                                                "description": "O preço atualizado do ativo financeiro.",
+                                                "type": "string"
+                                            }
+                                        },
+                                        "type": "object"
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "403": {
+                        "description": "Acesso negado",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Key de acesso incorreta!"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Erro interno do servidor",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Erro interno do servidor"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
         "/api/delete/profile": {
             "delete": {
                 "tags": [
@@ -626,6 +786,79 @@
                                         "message": {
                                             "type": "string",
                                             "example": "Falha ao atualizar dados, tente novamente."
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/api/wallet/consolidator": {
+            "get": {
+                "tags": [
+                    "Wallet"
+                ],
+                "summary": "Calcula o valor médio de compra de fundos imobiliários",
+                "description": "Retorna o valor médio de compra de cada fundo imobiliário na carteira do usuário, considerando todas as compras até a data limite especificada.",
+                "operationId": "walletConsolidator",
+                "responses": {
+                    "200": {
+                        "description": "Dados da carteira retornados com sucesso",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "array",
+                                    "items": {
+                                        "properties": {
+                                            "acronym": {
+                                                "type": "string",
+                                                "example": "XYZ1"
+                                            },
+                                            "averagePurchasePrice": {
+                                                "type": "number",
+                                                "format": "double",
+                                                "example": 123.45
+                                            }
+                                        },
+                                        "type": "object"
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Dados inválidos fornecidos",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Data inválida fornecida"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Erro interno do servidor",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Erro interno do servidor"
                                         }
                                     },
                                     "type": "object"
