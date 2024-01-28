@@ -16,7 +16,8 @@ return new class extends Migration
             $table->string("acronym", 4)->unique();
             $table->string("fundName");
             $table->string("companyName");
-            $table->enum('type', ['FIAGRO', 'FII']);
+            $table->enum('fundCategory', ['FIAGRO', 'FII']);
+            $table->enum('investmentType', ['TIJOLO', 'PAPEL', 'HÍBRIDO'])->nullable();
             $table->string('segment')->nullable();
             $table->boolean('active')->default(true);
             $table->timestamps();

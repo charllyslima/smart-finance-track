@@ -19,6 +19,8 @@ return new class extends Migration
             $table->double('price');
             $table->double('total');
             $table->enum('type', ['purchase', 'sale']);
+            $table->date('date_request');
+            $table->date('date_effective');
             $table->timestamps();
         });
     }

@@ -10,4 +10,10 @@ class FiAssetsDividends extends Model
     use HasFactory;
 
     protected $fillable = ['value', 'base_date', 'payment_date'];
+
+    public function fiAsset()
+    {
+        return $this->belongsTo(FiAsset::class);
+    }
+
 }

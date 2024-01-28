@@ -6,6 +6,7 @@ use App\Models\FiAsset;
 use GuzzleHttp\Exception\GuzzleException;
 use Illuminate\Database\Seeder;
 use GuzzleHttp\Client;
+use JsonException;
 
 class FiAssetsSeeder extends Seeder
 {
@@ -27,6 +28,7 @@ class FiAssetsSeeder extends Seeder
      *
      * @param int $fundType
      * @throws GuzzleException
+     * @throws JsonException
      */
     private function seedTrusts(int $fundType): void
     {
@@ -39,7 +41,7 @@ class FiAssetsSeeder extends Seeder
             'pageSize' => 500,
         ];
 
-        $encodeData = base64_encode(json_encode($params));
+        $encodeData = base64_encode(json_encode($params, JSON_THROW_ON_ERROR));
 
         $apiUrl = "{$urlBase}/fundsProxy/fundsCall/GetListedFundsSIG/$encodeData";
 
@@ -61,7 +63,7 @@ class FiAssetsSeeder extends Seeder
                     'acronym' => $item['acronym'],
                     'fundName' => $item['fundName'],
                     'companyName' => $item['companyName'],
-                    'type' => $fundType === self::FII ? 'FII' : 'FIAGRO',
+                    'fundCategory' => $fundType === self::FII ? 'FII' : 'FIAGRO',
                 ]);
             }
         }

@@ -28,6 +28,8 @@ class FiAssetsEventsSeeder extends Seeder
         $total = count($fiis);
         foreach ($fiis as $fii) {
             echo $fii->acronym . '11...........';
+
+
             $params = [
                 'identifierFund' => $fii->acronym . '11',
                 'typeFund' => $fii->type === 'FIAGRO' ? self::FIAGRO : self::FII,

@@ -16,8 +16,7 @@ class FiAssetsDividendsSeeder extends Seeder
      */
     public function run(): void
     {
-        $urlBase = env('URI_SI', '');
-        $apiUrl = "$urlBase/fii/companytickerprovents";
+        $urlBase = env('URI_CVM', '');
 
         $client = new Client([
             'headers' => [
@@ -28,14 +27,35 @@ class FiAssetsDividendsSeeder extends Seeder
                 'Connection' => 'keep-alive',
             ]
         ]);
-        $fiis = FiAsset::all();
+
+        $fiis = FFiAsset::with('information')
+            ->get()
+            ->map(function ($asset) {
+                $result = new \stdClass;
+                $result->id = $asset->id;
+                $result->cnpj = $asset->information->cnpj ?? null;
+                $result->acronym = $asset->acronym ?? null;
+                return $result;
+            });
+
         $index = 1;
         $total = count($fiis);
         foreach ($fiis as $fii) {
+            $apiUrl = "$urlBase/fnet/publico/abrirGerenciadorDocumentosCVM";
             echo $fii->acronym . '11...........';
+
             $params = [
-                'ticker' => $fii->acronym . '11',
-                'chartProventsType' => 2,
+                'd' => 4,
+                's' => 0, // PAGINA (AUMENTA DE 100 EM 100) - 0, 100, 200, 300, 400, 500, 600
+                'l' => 100, // POR PAGINA
+                'o' => [
+                    ['dataEntrega' => 'desc']
+                ],
+                'cnpjFundo' => $fii->cnpj,
+                'idCategoriaDocumento' => 0,
+                'idTipoDocumento' => 0,
+                'idEspecieDocumento' => 0,
+                '_' => 1706408552268,
             ];
 
             $response = $client->request('GET', $apiUrl, [
@@ -49,11 +69,16 @@ class FiAssetsDividendsSeeder extends Seeder
                     $baseDate = Carbon::createFromFormat('d/m/Y', $dividend['ed']);
                     $paymentDate = Carbon::createFromFormat('d/m/Y', $dividend['pd']);
 
-                    FiAssetsDividends::create([
+                    FiAssetsDividends::firstOrCreate([
                         'fi_asset_id' => $fii->id,
-                        'value' => (double)$dividend['sv'],
                         'base_date' => $baseDate,
-                        'payment_date' => $paymentDate
+                        'payment_date' => $paymentDate,
+                        'value' => (double)$dividend['sv']
+                    ], [
+                        'fi_asset_id' => $fii->id,
+                        'base_date' => $baseDate,
+                        'payment_date' => $paymentDate,
+                        'value' => (double)$dividend['sv']
                     ]);
                 }
             }

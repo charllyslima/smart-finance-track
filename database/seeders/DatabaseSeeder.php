@@ -13,7 +13,11 @@ class DatabaseSeeder extends Seeder
     public function run(): void
     {
         $this->call([
-            FiAssetsEventsSeeder::class // IMPORTA HISTORICO DE DIVIDENDOS
+            FiAssetsSeeder::class, //B3
+            FiAssetsInformationsSeeder::class, //B3
+            FiAssetsDividendsSeeder::class, //STATUS INVEST
+            FiAssetsValuesSeeder::class //STATUS INVEST
+
         ]);
     }
 }

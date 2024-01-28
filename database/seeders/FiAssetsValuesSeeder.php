@@ -44,10 +44,14 @@ class FiAssetsValuesSeeder extends Seeder
             $data = json_decode($response->getBody(), true);
             if (isset($data[0])) {
                 foreach ($data[0]['prices'] as $price) {
-                    FiAssetsValue::create([
+                    FiAssetsValue::firstOrCreate([
                         'fi_asset_id' => $fii->id,
                         'value' => $price['price'],
                         'created_at' => Carbon::createFromFormat('d/m/y H:i', $price['date']),
+                    ], [
+                        'fi_asset_id' => $fii->id,
+                        'value' => $price['price'],
+                        'created_at' => Carbon::createFromFormat('d/m/y H:i', $price['date'])
                     ]);
                 }
             }
