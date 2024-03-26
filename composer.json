@@ -9,14 +9,17 @@
     "license": "MIT",
     "require": {
         "php": "^8.1",
+        "ext-dom": "*",
+        "ext-libxml": "*",
+        "ext-simplexml": "*",
         "darkaonline/l5-swagger": "^8.5",
         "guzzlehttp/guzzle": "^7.2",
         "laravel/framework": "^10.10",
         "laravel/sanctum": "^3.3",
         "laravel/tinker": "^2.8",
         "phpoffice/phpspreadsheet": "^1.29",
-        "ext-dom": "*",
-        "ext-libxml": "*"
+        "smalot/pdfparser": "2.8",
+        "spatie/pdf-to-text": "^1.52"
     },
     "require-dev": {
         "roave/security-advisories": "dev-latest",

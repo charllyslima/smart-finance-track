@@ -15,9 +15,8 @@ class DatabaseSeeder extends Seeder
         $this->call([
             FiAssetsSeeder::class, //B3
             FiAssetsInformationsSeeder::class, //B3
-            FiAssetsDividendsSeeder::class, //STATUS INVEST
+            FiAssetsDividendsSeeder::class, //CVM
             FiAssetsValuesSeeder::class //STATUS INVEST
-
         ]);
     }
 }

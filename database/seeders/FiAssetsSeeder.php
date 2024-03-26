@@ -59,12 +59,16 @@ class FiAssetsSeeder extends Seeder
 
             // Se não existir, cria um novo registro
             if (!$existingTrust) {
+
                 FiAsset::create([
                     'acronym' => $item['acronym'],
-                    'fundName' => $item['fundName'],
-                    'companyName' => $item['companyName'],
-                    'fundCategory' => $fundType === self::FII ? 'FII' : 'FIAGRO',
-                ]);
+                ],
+                    [
+                        'acronym' => $item['acronym'],
+                        'fundName' => $item['fundName'],
+                        'companyName' => $item['companyName'],
+                        'fundCategory' => $fundType === self::FII ? 'FII' : 'FIAGRO',
+                    ]);
             }
         }
     }
