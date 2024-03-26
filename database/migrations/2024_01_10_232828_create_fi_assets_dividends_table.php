@@ -16,7 +16,9 @@ return new class extends Migration
             $table->foreignId('fi_asset_id')->constrained('fi_assets');
             $table->double('value');
             $table->date('base_date');
+            $table->date('reference_date');
             $table->date('payment_date');
+            $table->boolean('amortization')->default(false);
             $table->timestamps();
         });
     }

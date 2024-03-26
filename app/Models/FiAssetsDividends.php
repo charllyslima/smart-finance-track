@@ -9,7 +9,7 @@ class FiAssetsDividends extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['value', 'base_date', 'payment_date'];
+    protected $fillable = ['value', 'base_date', 'payment_date', 'reference_date', 'amortization'];
 
     public function fiAsset()
     {
