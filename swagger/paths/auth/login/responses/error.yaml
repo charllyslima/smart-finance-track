@@ -1,0 +1,9 @@
+description: "Credenciais fornecidas são incorretas"
+content:
+  application/json:
+    schema:
+      type: object
+      properties:
+        message:
+          type: string
+          example: "As credenciais fornecidas são incorretas."

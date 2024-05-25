@@ -1,0 +1,16 @@
+description: "Dados de entrada inválidos ou incompletos"
+content:
+  application/json:
+    schema:
+      type: object
+      properties:
+        message:
+          type: string
+          example: "Os dados fornecidos são inválidos."
+        errors:
+          type: object
+          additionalProperties:
+            type: array
+            items:
+              type: string
+              example: "O campo é obrigatório."

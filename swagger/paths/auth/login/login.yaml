@@ -1,0 +1,31 @@
+post:
+  summary: "Efetuar login de usuário"
+  description: "Efetua login de um usuário com base nas credenciais fornecidas e gera um token de autenticação."
+  operationId: "login"
+  tags:
+    - "Autenticação"
+  security: []
+  requestBody:
+    required: true
+    description: "Credenciais do usuário para login"
+    content:
+      application/json:
+        schema:
+          required:
+            - email
+            - password
+          type: object
+          properties:
+            email:
+              type: string
+              format: email
+              example: "johndoe@example.com"
+            password:
+              type: string
+              format: password
+              example: "senha123"
+  responses:
+    "200":
+      $ref: "./responses/success.yaml"
+    "401":
+      $ref: "./responses/error.yaml"

@@ -5,7 +5,7 @@ return [
     'documentations' => [
         'default' => [
             'api' => [
-                'title' => 'Smart Finance Track',
+                'title' => 'L5 Swagger UI',
             ],
 
             'routes' => [
@@ -15,6 +15,10 @@ return [
                 'api' => 'api/documentation',
             ],
             'paths' => [
+                'docs' => 'storage/api-docs',
+                'annotations' => [
+                    base_path('swagger'),
+                ],
                 /*
                  * Edit to include full URL in ui for assets
                 */
@@ -34,14 +38,6 @@ return [
                 * Set this to `json` or `yaml` to determine which documentation file to use in UI
                 */
                 'format_to_use_for_docs' => env('L5_FORMAT_TO_USE_FOR_DOCS', 'json'),
-
-                /*
-                 * Absolute paths to directory containing the swagger annotations are stored.
-                */
-                'annotations' => [
-                    base_path('app'),
-                ],
-
             ],
         ],
     ],
@@ -120,7 +116,7 @@ return [
             /**
              * Custom query path processors classes.
              *
-             * @link https://github.com/zircote/swagger-php/tree/master/Examples/schema-query-parameter-processor
+             * @link https://github.com/zircote/swagger-php/tree/master/Examples/processors/schema-query-parameter
              * @see \OpenApi\scan
              */
             'processors' => [
@@ -294,7 +290,7 @@ return [
          * Constants which can be used in annotations
          */
         'constants' => [
-            'L5_SWAGGER_CONST_HOST' => env('L5_SWAGGER_CONST_HOST', 'http://127.0.0.1:8000'),
+            'L5_SWAGGER_CONST_HOST' => env('L5_SWAGGER_CONST_HOST', 'http://my-default-host.com'),
         ],
     ],
 ];

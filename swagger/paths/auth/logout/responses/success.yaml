@@ -1,0 +1,9 @@
+description: "Logout bem-sucedido"
+content:
+  application/json:
+    schema:
+      type: object
+      properties:
+        message:
+          type: string
+          example: "Sessão encerrada com sucesso."

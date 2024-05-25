@@ -1,0 +1,14 @@
+description: "Login bem-sucedido"
+content:
+  application/json:
+    schema:
+      type: object
+      properties:
+        access_token:
+          type: string
+          example: "seu_token_de_acesso"
+        token_type:
+          type: string
+          example: "Bearer"
+        user:
+          $ref: "../../../schemas/user.yaml"

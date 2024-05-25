@@ -1,0 +1,25 @@
+openapi: 3.0.0
+info:
+  title: "Smart Finance Tracker API"
+  version: "1.0.0"
+  description: "Descrição do seu projeto Laravel"
+servers:
+  - url: "http://localhost:8000"
+paths:
+  /api/register:
+    $ref: "./paths/auth/register/register.yaml"
+  /api/login:
+    $ref: "./paths/auth/login/login.yaml"
+  /api/logout:
+    $ref: "./paths/auth/logout/logout.yaml"
+  /api/import-brokerage-statement:
+    $ref: "./paths/brokerage/import/import.yaml"
+components:
+  schemas:
+    User:
+      $ref: "./schemas/user.yaml"
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT

@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\BrokerageStatementController;
 use App\Http\Controllers\FinancialImportController;
 use App\Http\Controllers\FinancialTransactionsController;
 use App\Http\Controllers\SyncController;
@@ -35,7 +36,7 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::get('/financial-transactions/{id}', [FinancialTransactionsController::class,'show'])->where('id', '[0-9]+');
     Route::put('/update/profile', [UserController::class, 'update']);
     Route::delete('/delete/profile', [UserController::class, 'destroy']);
-    Route::post('/import-personal', [FinancialImportController::class, 'importHistoryB3']);
+    Route::post('/import-brokerage-statement', [BrokerageStatementController::class, 'importBrokerageStatement']);
     Route::get('/wallet/consolidator', [WalletController::class, 'walletConsolidator']);
 });
 

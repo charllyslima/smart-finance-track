@@ -1,0 +1,40 @@
+post:
+  summary: "Registrar um novo usuário"
+  description: "Cria um novo usuário e gera um token de autenticação."
+  operationId: "register"
+  tags:
+    - "Autenticação"
+  security: []
+  requestBody:
+    required: true
+    description: "Dados do usuário a serem registrados"
+    content:
+      application/json:
+        schema:
+          required:
+            - name
+            - email
+            - password
+            - password_confirmation
+          type: object
+          properties:
+            name:
+              type: string
+              example: "John Doe"
+            email:
+              type: string
+              format: email
+              example: "johndoe@example.com"
+            password:
+              type: string
+              format: password
+              example: "senha123"
+            password_confirmation:
+              type: string
+              format: password
+              example: "senha123"
+  responses:
+    "201":
+      $ref: "./responses/success.yaml"
+    "422":
+      $ref: "./responses/error.yaml"

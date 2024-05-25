@@ -1,0 +1,32 @@
+post:
+  summary: "Importar nota de corretagem"
+  description: "Importa uma nota de corretagem de um arquivo PDF e salva as informações no banco de dados."
+  tags:
+    - "Notas de Corretagem"
+  requestBody:
+    required: true
+    content:
+      multipart/form-data:
+        schema:
+          type: object
+          required:
+            - broker_id
+            - brokerage_statement
+          properties:
+            broker_id:
+              type: integer
+              description: "ID da corretora"
+              example: 1
+            brokerage_statement:
+              type: string
+              format: binary
+              description: "Arquivo PDF da nota de corretagem"
+  responses:
+    '200':
+      $ref: "./responses/success.yaml"
+    '400':
+      $ref: "./responses/error.yaml"
+    '401':
+      description: "Não autorizado"
+  security:
+    - bearerAuth: []

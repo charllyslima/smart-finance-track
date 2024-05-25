@@ -1,0 +1,12 @@
+description: "Nota de corretagem importada com sucesso"
+content:
+  application/json:
+    schema:
+      type: object
+      properties:
+        success:
+          type: boolean
+          example: true
+        message:
+          type: string
+          example: "Nota de corretagem importada com sucesso!"

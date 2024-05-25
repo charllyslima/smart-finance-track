@@ -3,11 +3,14 @@
     "type": "module",
     "scripts": {
         "dev": "vite",
-        "build": "vite build"
+        "build": "vite build",
+        "bundle-swagger": "swagger-cli bundle swagger/swagger.yaml --outfile storage/swagger/swagger.json --type json",
+        "postinstall": "cp -r node_modules/swagger-ui-dist/* public/swagger-ui/"
     },
     "devDependencies": {
         "axios": "^1.6.1",
         "laravel-vite-plugin": "^0.8.0",
+        "swagger-ui-dist": "^5.17.12",
         "vite": "^4.0.0"
     }
 }
