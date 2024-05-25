@@ -159,6 +159,12 @@ class BrokerageStatementController extends Controller
 
     private function processArchiveAgora(BrokerageStatement $brokerageStatement, array $text): BrokerageStatement
     {
+        $startMarker = 'Negócios realizados';
+        $endMarker = 'NOTA DE NEGOCIAÇÃO';
+        $collecting = false;
+        $negotiations = [];
+        foreach ($text as $index => $line) {
+        }
         return $brokerageStatement;
     }
 
