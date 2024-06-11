@@ -10,13 +10,13 @@ post:
         schema:
           type: object
           required:
-            - broker_id
+            - broker_slug
             - brokerage_statement
           properties:
-            broker_id:
-              type: integer
-              description: "ID da corretora"
-              example: 1
+            broker_slug:
+              type: string
+              description: "Slug da corretora"
+              example: "broker-clear"
             brokerage_statement:
               type: string
               format: binary

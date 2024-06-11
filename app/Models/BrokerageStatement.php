@@ -13,7 +13,7 @@ class BrokerageStatement extends Model
 
 
     protected $fillable = [
-        'broker_id',
+        'broker_slug',
         'user_id',
         'note_number',
         'trade_date',

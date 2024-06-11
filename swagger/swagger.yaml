@@ -17,7 +17,7 @@ paths:
 components:
   schemas:
     User:
-      $ref: "./schemas/user.yaml"
+      $ref: "./paths/schemas/user.yaml"
   securitySchemes:
     bearerAuth:
       type: http

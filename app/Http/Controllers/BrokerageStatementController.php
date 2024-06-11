@@ -14,7 +14,58 @@ use App\Http\Requests\ImportBrokerageStatementRequest;
 
 class BrokerageStatementController extends Controller
 {
-
+    /**
+     * @OA\Post(
+     *     path="/api/import-brokerage-statement",
+     *     summary="Importar nota de corretagem",
+     *     description="Importa uma nota de corretagem de um arquivo PDF e salva as informações no banco de dados.",
+     *     tags={"Notas de Corretagem"},
+     *     @OA\RequestBody(
+     *         required=true,
+     *         @OA\MediaType(
+     *             mediaType="multipart/form-data",
+     *             @OA\Schema(
+     *                 @OA\Property(
+     *                     property="broker_id",
+     *                     description="ID da corretora",
+     *                     type="integer",
+     *                     example=1
+     *                 ),
+     *                 @OA\Property(
+     *                     property="brokerage_statement",
+     *                     description="Arquivo PDF da nota de corretagem",
+     *                     type="string",
+     *                     format="binary"
+     *                 ),
+     *                 required={"broker_id", "brokerage_statement"}
+     *             )
+     *         )
+     *     ),
+     *     @OA\Response(
+     *         response=200,
+     *         description="Nota de corretagem importada com sucesso",
+     *         @OA\JsonContent(
+     *             type="object",
+     *             @OA\Property(property="success", type="boolean", example=true),
+     *             @OA\Property(property="message", type="string", example="Nota de corretagem importada com sucesso!")
+     *         )
+     *     ),
+     *     @OA\Response(
+     *         response=400,
+     *         description="Erro na importação da nota de corretagem",
+     *         @OA\JsonContent(
+     *             type="object",
+     *             @OA\Property(property="success", type="boolean", example=false),
+     *             @OA\Property(property="message", type="string", example="Erro na importação da nota de corretagem")
+     *         )
+     *     ),
+     *     @OA\Response(
+     *         response=401,
+     *         description="Não autorizado",
+     *     ),
+     *     security={{ "bearerAuth": {} }},
+     * )
+     */
     public function importBrokerageStatement(ImportBrokerageStatementRequest $request): JsonResponse
     {
 
@@ -33,8 +84,8 @@ class BrokerageStatementController extends Controller
 
         // Extrair texto do PDF
         $text = $pdf->getText();
+
         return $this->processArchive($text, (int)$brokerId);
-        
     }
 
     private function processArchive(string $text, int $brokerId): mixed
@@ -58,8 +109,8 @@ class BrokerageStatementController extends Controller
         if ($brokerageStatement === null) {
             return response()->json(['message' => 'Falha ao importar nota de negociação.'], 500);
         }
-
         return response()->json([$brokerageStatement], 200);
+
     }
 
     private function processAgoraArchive($text): array
@@ -85,7 +136,7 @@ class BrokerageStatementController extends Controller
 
         foreach ($operation as $key => $data) {
             if (str_contains($data, '11')) {
-                $negociation->acronym = str_replace('11', '', $data);
+                $negociation->acronym = str_replace('11', '',$data);
                 $negociation->quantity = (int)preg_replace('/\D/', '', $operation[count($operation) - 2]);
                 $patterns = ['/(1-BOVESPA)/', '/(VISTA\tFII)/'];
                 if ($operation[0] === '1-BOVESPA') {
@@ -159,12 +210,6 @@ class BrokerageStatementController extends Controller
 
     private function processArchiveAgora(BrokerageStatement $brokerageStatement, array $text): BrokerageStatement
     {
-        $startMarker = 'Negócios realizados';
-        $endMarker = 'NOTA DE NEGOCIAÇÃO';
-        $collecting = false;
-        $negotiations = [];
-        foreach ($text as $index => $line) {
-        }
         return $brokerageStatement;
     }
 

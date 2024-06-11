@@ -23,7 +23,7 @@ class ImportBrokerageStatementRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'broker_id' => 'required|exists:brokers,id',
+            'broker_slug' => 'required|exists:brokers,slug',
             'brokerage_statement' => 'required|file|mimes:pdf',
         ];
     }

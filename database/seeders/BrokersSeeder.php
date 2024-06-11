@@ -16,11 +16,19 @@ class BrokersSeeder extends Seeder
     {
         Broker::create([
             'name' => 'Clear Corretora',
+            'slug' => 'broker-clear',
             'created_at' => Carbon::now(),
         ]);
 
         Broker::create([
             'name' => 'Ágora Corretora',
+            'slug' => 'broker-agora',
+            'created_at' => Carbon::now(),
+        ]);
+
+        Broker::create([
+            'name' => 'BTG Pactual Investimentos',
+            'slug' => 'broker-btg',
             'created_at' => Carbon::now(),
         ]);
     }

@@ -13,7 +13,8 @@ return new class extends Migration
     {
         Schema::create('brokerage_statements', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('broker_id')->constrained('brokers');
+            $table->string('broker_slug');
+            $table->foreign('broker_slug')->references('slug')->on('brokers')->onDelete('cascade');
             $table->foreignId('user_id')->constrained('users');
             $table->string('note_number')->unique();
             $table->date('trade_date');
